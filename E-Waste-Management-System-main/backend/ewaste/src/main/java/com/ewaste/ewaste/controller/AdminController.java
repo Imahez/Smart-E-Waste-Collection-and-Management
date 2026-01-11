@@ -21,6 +21,19 @@ public class AdminController {
 
     private final AdminService adminService;
     private final UserRepository userRepository;
+    private final com.ewaste.ewaste.repository.PickupPersonRepository pickupPersonRepository;
+    private final com.ewaste.ewaste.repository.EwasteRequestRepository ewasteRequestRepository;
+
+    @GetMapping("/dashboard-summary")
+    public ResponseEntity<?> getDashboardSummary() {
+        Map<String, Object> summary = new java.util.HashMap<>();
+        summary.put("totalUsers", userRepository.count());
+        summary.put("totalPickupPersons", pickupPersonRepository.count());
+        summary.put("totalRequests", ewasteRequestRepository.count());
+        summary.put("statusStats", ewasteRequestRepository.countRequestsByStatus());
+        summary.put("deviceStats", ewasteRequestRepository.countRequestsByDeviceType());
+        return ResponseEntity.ok(summary);
+    }
 
     @GetMapping("/pickup-persons")
     public ResponseEntity<?> getPickupPersons() {
