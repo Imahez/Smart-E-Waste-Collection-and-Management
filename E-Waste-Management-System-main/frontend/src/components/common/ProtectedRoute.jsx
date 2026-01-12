@@ -12,7 +12,7 @@ const ProtectedRoute = ({ user, allowedRoles, children }) => {
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // Redirect based on their actual role
     if (user.role === 'ROLE_ADMIN') return <Navigate to="/admin" replace />;
-    if (user.role === 'ROLE_PICKUP_PERSON') return <Navigate to="/pickup" replace />;
+    if (user.role === 'ROLE_PICKUP_PERSON') return <Navigate to="/pickup-person" replace />;
     return <Navigate to="/dashboard" replace />;
   }
 

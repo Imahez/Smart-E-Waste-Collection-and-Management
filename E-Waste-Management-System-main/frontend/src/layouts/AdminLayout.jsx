@@ -1,17 +1,16 @@
 import React from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import OpenAIChatBot from '../components/GeminiChatBot'; // <--- FIXED IMPORT
-import { 
-  LayoutDashboard, 
-  ClipboardList, 
-  Truck, 
-  Calendar, 
+import GeminiChatBot from '../components/GeminiChatBot';
+import {
+  LayoutDashboard,
+  ClipboardList,
+  Truck,
   Settings,
   LogOut,
-  User,
-  Users, 
-  FileText 
+  User as UserIcon,
+  Users,
+  FileText
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -34,7 +33,7 @@ const AdminLayout = () => {
       <div className="w-64 bg-white shadow-lg border-r border-gray-200 flex flex-col">
         <div className="flex items-center p-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
-            <div className="bg-primary-600 p-1.5 rounded-lg">
+            <div className="bg-blue-600 p-1.5 rounded-lg">
               <LayoutDashboard className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">Admin Panel</span>
@@ -43,31 +42,30 @@ const AdminLayout = () => {
 
         <div className="p-4 border-b border-gray-200 bg-gray-50">
           <div className="flex items-center space-x-3">
-            <div className="bg-primary-100 w-10 h-10 rounded-full flex items-center justify-center border-2 border-primary-200">
-              <User className="h-5 w-5 text-primary-600" />
+            <div className="bg-blue-100 w-10 h-10 rounded-full flex items-center justify-center border-2 border-blue-200">
+              <UserIcon className="h-5 w-5 text-blue-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">{user?.name}</p>
-              <p className="text-xs text-primary-600 font-semibold uppercase tracking-wider">Administrator</p>
+              <p className="text-xs text-blue-600 font-semibold uppercase tracking-wider">Administrator</p>
             </div>
           </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const Icon = item.icon;
+            const IconComponent = item.icon;
             const isActive = location.pathname === item.path;
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${
-                  isActive
-                    ? 'bg-primary-50 text-primary-700 shadow-sm border border-primary-100'
+                className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-all duration-200 ${isActive
+                    ? 'bg-blue-50 text-blue-700 shadow-sm border border-blue-100'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                }`}
+                  }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-500'}`} />
+                <IconComponent className={`h-5 w-5 ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
                 <span className="font-medium">{item.label}</span>
               </Link>
             );
@@ -95,12 +93,11 @@ const AdminLayout = () => {
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto bg-gray-50">
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
           <Outlet />
         </main>
 
-        {/* Chatbot added here */}
-        <OpenAIChatBot />
+        <GeminiChatBot />
       </div>
     </div>
   );
