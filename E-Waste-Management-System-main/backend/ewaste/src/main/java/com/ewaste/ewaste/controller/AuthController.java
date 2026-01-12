@@ -19,8 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
-@CrossOrigin
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -29,7 +28,12 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
-    @PostMapping("/login")
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Backend is UP and Running!");
+    }
+
+    @PostMapping("/auth/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         System.out.println("Login attempt for: " + loginRequest.getEmail()); // DEBUG LOG
 
@@ -37,9 +41,7 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
-                            loginRequest.getPassword()
-                    )
-            );
+                            loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = tokenProvider.generateJwtToken(authentication);
@@ -59,21 +61,31 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body("Email is already in use!");
+        System.out.println("Registration request received for: " + signUpRequest.getEmail()); // DEBUG LOG
+        try {
+            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+                System.out.println("Registration failed: Email already exists: " + signUpRequest.getEmail());
+                return ResponseEntity.badRequest().body("Email is already in use!");
+            }
+
+            User user = new User();
+            user.setName(signUpRequest.getName());
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+            user.setPhoneNumber(signUpRequest.getPhone());
+            user.setAddress(signUpRequest.getAddress());
+            user.setRole(Role.ROLE_USER); // Default role for public registration
+
+            userRepository.save(user);
+            System.out.println("User registered successfully: " + signUpRequest.getEmail());
+            return ResponseEntity.ok("User registered successfully");
+        } catch (Exception e) {
+            System.err.println("Registration Error for " + signUpRequest.getEmail() + ": " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Registration failed: " + e.getMessage());
         }
-
-        User user = new User();
-        user.setName(signUpRequest.getName());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-        user.setPhoneNumber(signUpRequest.getPhone());
-        user.setAddress(signUpRequest.getAddress());
-        user.setRole(Role.ROLE_USER); // Default role for public registration
-
-        userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
     }
 }
