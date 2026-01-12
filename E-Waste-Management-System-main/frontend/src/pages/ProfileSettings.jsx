@@ -103,43 +103,49 @@ const ProfileSettings = () => {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Full Name</label>
+                                    <label htmlFor="name" className="text-xs font-bold text-gray-500 uppercase">Full Name</label>
                                     <div className="relative">
                                         <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                                         <input
+                                            id="name"
                                             name="name"
                                             required
                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             value={formData.name}
                                             onChange={handleChange}
+                                            autoComplete="name"
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Phone Number</label>
+                                    <label htmlFor="phoneNumber" className="text-xs font-bold text-gray-500 uppercase">Phone Number</label>
                                     <div className="relative">
                                         <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                                         <input
+                                            id="phoneNumber"
                                             name="phoneNumber"
                                             required
                                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             value={formData.phoneNumber}
                                             onChange={handleChange}
+                                            autoComplete="tel"
                                         />
                                     </div>
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase">Default Pickup Address</label>
+                                <label htmlFor="address" className="text-xs font-bold text-gray-500 uppercase">Default Pickup Address</label>
                                 <div className="relative">
                                     <MapPin className="absolute left-4 top-3.5 text-gray-400 w-4 h-4" />
                                     <textarea
+                                        id="address"
                                         name="address"
                                         required
                                         rows="3"
                                         className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                         value={formData.address}
                                         onChange={handleChange}
+                                        autoComplete="street-address"
                                     />
                                 </div>
                             </div>
@@ -156,10 +162,11 @@ const ProfileSettings = () => {
                             </p>
                             <div className="space-y-6">
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Current Password</label>
+                                    <label htmlFor="currentPassword" className="text-xs font-bold text-gray-500 uppercase">Current Password</label>
                                     <div className="relative">
                                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                                         <input
+                                            id="currentPassword"
                                             type={showPassword ? 'text' : 'password'}
                                             name="currentPassword"
                                             required
@@ -167,6 +174,7 @@ const ProfileSettings = () => {
                                             placeholder="••••••••"
                                             value={formData.currentPassword}
                                             onChange={handleChange}
+                                            autoComplete="current-password"
                                         />
                                         <button
                                             type="button"
@@ -179,24 +187,28 @@ const ProfileSettings = () => {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">New Password</label>
+                                        <label htmlFor="newPassword" className="text-xs font-bold text-gray-500 uppercase">New Password</label>
                                         <input
+                                            id="newPassword"
                                             type="password"
                                             name="newPassword"
                                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             placeholder="Min. 8 characters"
                                             value={formData.newPassword}
                                             onChange={handleChange}
+                                            autoComplete="new-password"
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Confirm New Password</label>
+                                        <label htmlFor="confirmPassword" className="text-xs font-bold text-gray-500 uppercase">Confirm New Password</label>
                                         <input
+                                            id="confirmPassword"
                                             type="password"
                                             name="confirmPassword"
                                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
+                                            autoComplete="new-password"
                                         />
                                     </div>
                                 </div>

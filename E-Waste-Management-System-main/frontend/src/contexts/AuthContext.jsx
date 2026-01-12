@@ -24,11 +24,16 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             const response = await api.post('/api/auth/login', { email, password });
-            const { token, user: userData } = response.data;
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(userData));
-            setUser(userData);
-            return { success: true, user: userData };
+            const { accessToken, token, user: userData } = response.data;
+            const finalToken = token || accessToken;
+
+            if (finalToken) {
+                localStorage.setItem('token', finalToken);
+                localStorage.setItem('user', JSON.stringify(userData));
+                setUser(userData);
+                return { success: true, user: userData };
+            }
+            throw new Error('No token received from server');
         } catch (error) {
             console.error('Login error:', error);
             return {
@@ -62,6 +67,11 @@ export const AuthProvider = ({ children }) => {
         return !!localStorage.getItem('token');
     };
 
+    const normalizeRole = (role) => {
+        if (!role) return '';
+        return role.startsWith('ROLE_') ? role : `ROLE_${role}`;
+    };
+
     const value = {
         user,
         loading,
@@ -69,13 +79,14 @@ export const AuthProvider = ({ children }) => {
         logout,
         register,
         checkAuth,
-        isAdmin: user?.role === 'ROLE_ADMIN' || user?.role === 'ADMIN',
-        isPickupPerson: user?.role === 'ROLE_PICKUP_PERSON' || user?.role === 'PICKUP_PERSON'
+        isAdmin: normalizeRole(user?.role) === 'ROLE_ADMIN',
+        isPickupPerson: normalizeRole(user?.role) === 'ROLE_PICKUP_PERSON',
+        isUser: normalizeRole(user?.role) === 'ROLE_USER'
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 };

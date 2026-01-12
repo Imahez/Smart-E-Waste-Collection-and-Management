@@ -163,6 +163,7 @@ const Login = () => {
                       onChange={handleChange}
                       className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none"
                       placeholder="Enter your email"
+                      autoComplete="email"
                     />
                   </div>
                 </div>
@@ -182,6 +183,7 @@ const Login = () => {
                       onChange={handleChange}
                       className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none"
                       placeholder="Enter your password"
+                      autoComplete="current-password"
                     />
                     <button
                       type="button"
@@ -194,8 +196,10 @@ const Login = () => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center">
+                  <label htmlFor="remember" className="flex items-center cursor-pointer">
                     <input
+                      id="remember"
+                      name="remember"
                       type="checkbox"
                       className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                     />

@@ -2,7 +2,9 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 const AdminRoute = ({ user, children }) => {
-  if (!user || user.role !== 'ROLE_ADMIN') {
+  const isAdmin = user?.role === 'ROLE_ADMIN' || user?.role === 'ADMIN';
+
+  if (!user || !isAdmin) {
     return <Navigate to="/dashboard" replace />;
   }
 

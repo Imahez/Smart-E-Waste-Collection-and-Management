@@ -4,7 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 // --- Layouts ---
 import AdminLayout from './layouts/AdminLayout';
-import UserLayout from './layouts/UserLayout'; 
+import UserLayout from './layouts/UserLayout';
 import PublicLayout from './layouts/PublicLayout';
 import PickupPersonLayout from './layouts/PickupPersonLayout';
 
@@ -41,7 +41,7 @@ import RequestHistory from './components/Requests/RequestHistory';
 import AdminRequests from './components/Admin/AdminRequests';
 import PickupPersonManagement from './components/Admin/PickupPersonManagement';
 import Certificate from './components/Certificate/Certificate';
-import ManageUsers from './components/Admin/ManageUsers';    
+import ManageUsers from './components/Admin/ManageUsers';
 import ManageTickets from './components/Admin/ManageTickets';
 import ManageReports from './components/Admin/ManageReports';
 
@@ -63,10 +63,14 @@ function AppRoutes() {
 
   // Helper to redirect logged-in users who try to access unknown routes
   const getDefaultRedirect = () => {
-    if (!user) return '/'; // Redirect to Home if not logged in
-    if (user.role === 'ROLE_ADMIN' || user.role === 'ADMIN') return '/admin';
-    if (user.role === 'ROLE_PICKUP_PERSON' || user.role === 'PICKUP_PERSON') return '/pickup-person';
-    return '/dashboard';
+    if (!user) return '/';
+
+    const role = user.role;
+    if (role === 'ROLE_ADMIN' || role === 'ADMIN') return '/admin';
+    if (role === 'ROLE_PICKUP_PERSON' || role === 'PICKUP_PERSON') return '/pickup-person';
+    if (role === 'ROLE_USER' || role === 'USER') return '/dashboard';
+
+    return '/dashboard'; // Fallback for any other logged-in state
   };
 
   return (
@@ -80,7 +84,7 @@ function AppRoutes() {
 
       {/* === 2. Admin Routes === */}
       <Route path="/admin" element={
-          <AdminRoute user={user}><AdminLayout /></AdminRoute>
+        <AdminRoute user={user}><AdminLayout /></AdminRoute>
       }>
         <Route index element={<AdminDashboard />} />
         <Route path="requests" element={<AdminRequests />} />
@@ -93,7 +97,7 @@ function AppRoutes() {
 
       {/* === 3. Pickup Person Routes === */}
       <Route path="/pickup-person" element={
-          <ProtectedRoute user={user} allowedRoles={['ROLE_PICKUP_PERSON', 'PICKUP_PERSON']}><PickupPersonLayout /></ProtectedRoute>
+        <ProtectedRoute user={user} allowedRoles={['ROLE_PICKUP_PERSON', 'PICKUP_PERSON']}><PickupPersonLayout /></ProtectedRoute>
       }>
         <Route index element={<PickupPersonDashboard />} />
         <Route path="assignments" element={<MyAssignments />} />
@@ -107,7 +111,7 @@ function AppRoutes() {
 
       {/* === 4. User Routes (Pathless Layout Route) === */}
       <Route element={
-          <ProtectedRoute user={user}><UserLayout /></ProtectedRoute>
+        <ProtectedRoute user={user}><UserLayout /></ProtectedRoute>
       }>
         <Route path="/dashboard" element={<UserDashboard />} />
         <Route path="/new-request" element={<NewRequest />} />

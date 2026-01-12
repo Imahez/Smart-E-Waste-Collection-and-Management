@@ -8,11 +8,15 @@ const ProtectedRoute = ({ user, allowedRoles, children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  // Normalize roles for comparison
+  const normalizedUserRole = user.role?.startsWith('ROLE_') ? user.role : `ROLE_${user.role}`;
+  const normalizedAllowedRoles = allowedRoles?.map(r => r.startsWith('ROLE_') ? r : `ROLE_${r}`);
+
   // Check for role-based access if allowedRoles is defined
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
+  if (normalizedAllowedRoles && !normalizedAllowedRoles.includes(normalizedUserRole)) {
     // Redirect based on their actual role
-    if (user.role === 'ROLE_ADMIN') return <Navigate to="/admin" replace />;
-    if (user.role === 'ROLE_PICKUP_PERSON') return <Navigate to="/pickup-person" replace />;
+    if (normalizedUserRole === 'ROLE_ADMIN') return <Navigate to="/admin" replace />;
+    if (normalizedUserRole === 'ROLE_PICKUP_PERSON') return <Navigate to="/pickup-person" replace />;
     return <Navigate to="/dashboard" replace />;
   }
 

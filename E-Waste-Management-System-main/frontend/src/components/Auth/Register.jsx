@@ -17,7 +17,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   // Pull both register and login to enable auto-login flow
   const { register, login } = useAuth();
   const navigate = useNavigate();
@@ -65,20 +65,22 @@ const Register = () => {
         // 3. Auto-Login Flow
         try {
           const loginResult = await login(formData.email, formData.password);
-          
+
           if (loginResult.success) {
-             // 4. Redirect based on Role (matching Login.jsx logic)
-             const role = loginResult.user.role;
-             if (role === 'ROLE_ADMIN' || role === 'ADMIN') {
-               navigate('/admin');
-             } else if (role === 'ROLE_PICKUP_PERSON' || role === 'PICKUP_PERSON') {
-               navigate('/pickup-person');
-             } else {
-               navigate('/dashboard');
-             }
+            // 4. Redirect based on Role (matching Login.jsx logic)
+            const role = loginResult.user.role;
+            const normalizedRole = role?.startsWith('ROLE_') ? role : `ROLE_${role}`;
+
+            if (normalizedRole === 'ROLE_ADMIN') {
+              navigate('/admin');
+            } else if (normalizedRole === 'ROLE_PICKUP_PERSON') {
+              navigate('/pickup-person');
+            } else {
+              navigate('/dashboard');
+            }
           } else {
-             // Fallback if login fails weirdly
-             setTimeout(() => navigate('/login'), 1500);
+            // Fallback if login fails weirdly
+            setTimeout(() => navigate('/login'), 1500);
           }
         } catch (loginErr) {
           // If auto-login errors, send them to login page
@@ -216,12 +218,13 @@ const Register = () => {
                 {/* Name and Email Side by Side */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                       Full Name *
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="name"
                         type="text"
                         name="name"
                         required
@@ -229,17 +232,19 @@ const Register = () => {
                         onChange={handleChange}
                         className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="Full name"
+                        autoComplete="name"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       Email Address *
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="email"
                         type="email"
                         name="email"
                         required
@@ -247,6 +252,7 @@ const Register = () => {
                         onChange={handleChange}
                         className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="Email address"
+                        autoComplete="email"
                       />
                     </div>
                   </div>
@@ -255,35 +261,39 @@ const Register = () => {
                 {/* Phone and Address Side by Side */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
                       Phone Number
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="phone"
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
                         className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="Phone number"
+                        autoComplete="tel"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
                       Address
                     </label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="address"
                         type="text"
                         name="address"
                         value={formData.address}
                         onChange={handleChange}
                         className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="City, State"
+                        autoComplete="street-address"
                       />
                     </div>
                   </div>
@@ -292,12 +302,13 @@ const Register = () => {
                 {/* Passwords Side by Side */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                       Password *
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="password"
                         type={showPassword ? 'text' : 'password'}
                         name="password"
                         required
@@ -305,6 +316,7 @@ const Register = () => {
                         onChange={handleChange}
                         className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="Password"
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"
@@ -318,12 +330,13 @@ const Register = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
                       Confirm Password *
                     </label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
                       <input
+                        id="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
                         name="confirmPassword"
                         required
@@ -331,6 +344,7 @@ const Register = () => {
                         onChange={handleChange}
                         className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-200 focus:bg-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all rounded-xl outline-none text-sm"
                         placeholder="Confirm password"
+                        autoComplete="new-password"
                       />
                       <button
                         type="button"

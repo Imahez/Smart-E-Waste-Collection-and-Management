@@ -106,8 +106,10 @@ const QueriesSupport = () => {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Category</label>
+                                        <label htmlFor="category" className="text-xs font-bold text-gray-500 uppercase">Category</label>
                                         <select
+                                            id="category"
+                                            name="category"
                                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all appearance-none"
                                             value={formData.category}
                                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -120,8 +122,10 @@ const QueriesSupport = () => {
                                         </select>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Subject</label>
+                                        <label htmlFor="subject" className="text-xs font-bold text-gray-500 uppercase">Subject</label>
                                         <input
+                                            id="subject"
+                                            name="subject"
                                             required
                                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                             placeholder="Briefly describe the issue"
@@ -131,8 +135,10 @@ const QueriesSupport = () => {
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-xs font-bold text-gray-500 uppercase">Message</label>
+                                    <label htmlFor="message" className="text-xs font-bold text-gray-500 uppercase">Message</label>
                                     <textarea
+                                        id="message"
+                                        name="message"
                                         required
                                         rows="5"
                                         className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
