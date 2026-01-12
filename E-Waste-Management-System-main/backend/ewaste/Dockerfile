@@ -9,6 +9,9 @@ COPY build.gradle .
 COPY settings.gradle .
 COPY src src
 
+# Fix permissions for gradlew
+RUN chmod +x gradlew
+
 # Build the application
 RUN ./gradlew clean bootJar -x test
 
