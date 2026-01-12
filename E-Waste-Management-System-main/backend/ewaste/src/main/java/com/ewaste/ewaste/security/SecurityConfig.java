@@ -27,7 +27,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${cors.allowed.origins}")
+    @Value("${cors.allowed.origins:http://localhost:5173,https://eco-waste-management-system-frontend.onrender.com}")
     private String allowedOrigins;
 
     @Bean
